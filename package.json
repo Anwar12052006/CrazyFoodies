@@ -4,8 +4,8 @@
   "description": "this is namaste react by akhsay saini",
   "main": "app.js",
   "scripts": {
-    "Starts":"parcel index.html",
-    "build":"parcel build index.html",
+    "Starts": "parcel index.html",
+    "build": "parcel build index.html",
     "test": "jest"
   },
   "keywords": [
@@ -15,6 +15,9 @@
   "author": "akhsay sini",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
     "parcel": "^2.13.0",
     "process": "^0.11.10"
   },
