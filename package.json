@@ -2,9 +2,8 @@
   "name": "namaste-react",
   "version": "1.0.0",
   "description": "this is namaste react by akhsay saini",
-  "main": "app.js",
   "scripts": {
-    "Starts": "parcel index.html",
+    "starts": "parcel index.html",
     "build": "parcel build index.html",
     "test": "jest"
   },
@@ -23,6 +22,8 @@
   },
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^6.22.3"
   }
 }

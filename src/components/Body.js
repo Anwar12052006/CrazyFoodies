@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Shimmer from './Shimmer';
+import { Link } from 'react-router-dom';
 
 const Body = () => {
   // * React Hook -> A normal JavaScript function which is given to us by React (or) Normal JS utility functions
@@ -14,7 +15,7 @@ const Body = () => {
   const [searchText, setSearchText] = useState('');
 
   // * Whenever a state variable updates or changes, react triggers a reconciliation cycle(re-renders the component)
-  console.log('Body rendered');
+  // console.log('Body rendered');
 
   useEffect(() => {
     fetchData();
@@ -22,12 +23,16 @@ const Body = () => {
 
   const fetchData = async () => {
     const data = await fetch(
-      'https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING'
+      // "https://cors-anywhere.herokuapp.com/https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.644800&lng=77.216721&page_type=DESKTOP_WEB_LISTING"
+      "https://cors-anywhere.herokuapp.com/https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING"
     );
 
-    const json = await data.json();
+  
 
-    console.log(json);
+    const json = await data.json();
+    
+
+    // console.log(json);
     // * optional chaining
     // setListOfRestaurants(json.data.cards[2].data.data.cards);
     setListOfRestaurants(json?.data?.cards[2]?.data?.data?.cards);
@@ -39,7 +44,7 @@ const Body = () => {
   //   return <Shimmer />;
   // }
 
-  return listOfRestaurants.length === 0 ? (
+  return !listOfRestaurants || listOfRestaurants.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -60,7 +65,7 @@ const Body = () => {
           />
           <button
             onClick={() => {
-              // * Filter th restaurant cards and update the UI
+              // * Filter the restaurant cards and update the UI
               // * searchText
               console.log(searchText);
 
@@ -79,10 +84,10 @@ const Body = () => {
           onClick={() => {
             // * Filter logic
             const filteredList = listOfRestaurants.filter(
-              (res) => res.data.avgRating > 4
+              (res) => parseFloat(res.data.avgRating) > 4
             );
 
-            setListOfRestaurants(filteredList);
+            setFilteredRestaurant(filteredList);
             console.log(filteredList);
           }}
         >
@@ -93,7 +98,16 @@ const Body = () => {
         {/* // * looping through the <RestaurentCard /> components Using Array.map() method */}
 
         {filteredRestaurant.map((restaurant) => (
-          <RestaurantCard key={restaurant.data.id} resData={restaurant} />
+          <Link
+            style={{
+              textDecoration: 'none',
+              color: '#000',
+            }}
+            key={restaurant.data.id}
+            to={'/restaurants/' + restaurant.data.id}
+          >
+            <RestaurantCard resData={restaurant} />
+          </Link>
         ))}
       </div>
     </div>
