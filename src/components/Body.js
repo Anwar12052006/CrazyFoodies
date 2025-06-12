@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import RestaurantCard from './RestaurantCard';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
+import useOnlineStatus from '../utils/useOnlineStatus';
 
 const Body = () => {
   // * React Hook -> A normal JavaScript function which is given to us by React (or) Normal JS utility functions
@@ -20,29 +21,64 @@ const Body = () => {
   useEffect(() => {
     fetchData();
   }, []);
+ 
 
-  const fetchData = async () => {
-    const data = await fetch(
-      // "https://cors-anywhere.herokuapp.com/https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.644800&lng=77.216721&page_type=DESKTOP_WEB_LISTING"
-      "https://cors-anywhere.herokuapp.com/https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING"
-    );
+//   const fetchData = async () => {
+//     const data = await fetch(
+//       'https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING'
+//     );
 
   
 
-    const json = await data.json();
+
+  
+
+
+//     const json = await data.json();
+
+   
     
 
-    // console.log(json);
-    // * optional chaining
-    // setListOfRestaurants(json.data.cards[2].data.data.cards);
+//     // console.log(json);
+//     // * optional chaining
+//     // setListOfRestaurants(json.data.cards[2].data.data.cards);
+//    setListOfRestaurants(json?.data?.cards[2]?.data?.data?.cards);
+//    setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
+
+// //   const restaurantData = json?.data?.cards?.find(
+// //   (c) => c?.card?.card?.gridElements?.infoWithStyle?.restaurants
+// // )?.card?.card?.gridElements?.infoWithStyle?.restaurants;
+  
+
+// };
+  
+const fetchData = async () => {
+  const swiggyUrl = "https://www.swiggy.com/dapi/restaurants/list/v5?lat=30.7333148&lng=76.7794179&page_type=DESKTOP_WEB_LISTING";
+  const encodedURL = encodeURIComponent(swiggyUrl);
+
+  try {
+    const res = await fetch(`http://localhost:8080/proxy?url=${encodedURL}`);
+    const json = await res.json();
+
+    console.log(json);
+
     setListOfRestaurants(json?.data?.cards[2]?.data?.data?.cards);
     setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
-  };
+  } catch (error) {
+    console.error("Error fetching restaurant data:", error);
+  }
+};
+ 
+   
 
-  // * Conditional Rendering
-  // if (listOfRestaurants.length === 0) {
-  //   return <Shimmer />;
-  // }
+  const onlineStatus = useOnlineStatus();
+
+  if (onlineStatus === false)
+    return (
+      <h1 style={{ textAlign: 'center', marginTop: '100px' }}>
+        Looks like you're offline! Please check your internet connection
+      </h1>
+    );
 
   return !listOfRestaurants || listOfRestaurants.length === 0 ? (
     <Shimmer />

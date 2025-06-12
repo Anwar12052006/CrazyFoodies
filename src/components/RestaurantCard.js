@@ -34,7 +34,10 @@ const RestaurantCard = (props) => {
           </span>
           <span>{avgRating} stars</span>
         </h4>
-        <h4 className="item-price">₹ {costForTwo / 100} FOR TWO</h4>
+        <h4 className="item-price">
+          <span style={{ marginLeft: '4px' }}>₹</span>{' '}
+          <span>{costForTwo / 100} FOR TWO</span>
+        </h4>
         <h4 className="time">
           <span className="icons">
             <FiClock />

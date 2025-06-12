@@ -1,28 +1,15 @@
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // import Shimmer from './Shimmer';
+import useRestaurantMenu from '../utils/useRestaurantMenu';
 import ShimmerMenu from './ShimmerMenu';
 import { CDN_URL } from '../utils/constants';
-import { MENU_API } from '../utils/constants';
 import { FiClock } from 'react-icons/fi';
 import { AiOutlineStar } from 'react-icons/ai';
 
 const RestaurantMenu = () => {
-  const [resInfo, setResInfo] = useState(null);
-
   const { resId } = useParams();
-  // console.log(resId);
 
-  useEffect(() => {
-    fetchMenu();
-  }, []);
-
-  const fetchMenu = async () => {
-    const data = await fetch(MENU_API + resId);
-    const json = await data.json();
-    console.log(json);
-    setResInfo(json.data);
-  };
+  const resInfo = useRestaurantMenu(resId);
 
   if (resInfo === null) return <ShimmerMenu />;
 
@@ -30,7 +17,6 @@ const RestaurantMenu = () => {
     name,
     cuisines,
     costForTwoMessage,
-    costForTwo,
     cloudinaryImageId,
     avgRating,
     deliveryTime,
