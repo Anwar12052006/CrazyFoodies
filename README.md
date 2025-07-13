@@ -1,4 +1,4 @@
-# Namaste React
+# React
 
 
 # Parcel
@@ -39,7 +39,7 @@
 
 ## [😋 Food App Basic Layout 😍](https://food-app-basic-layout.netlify.app/)
 
-# Namaste Food
+# CrazyFoodies
 
 
 /* Components of Our Food-Order App
