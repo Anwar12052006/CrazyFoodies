@@ -1,6 +1,26 @@
+# Namaste React
 
 
-# Episode 04 - Talk is Cheap, show me the code!
+# Parcel
+- Dev Build
+- Local Server
+- HMR = Hot Module Replacement
+- File Watching Algorithm - written in c++
+- Caching - Faster Builds
+- Image Optimization
+- Minification
+- Bundling
+- Compress 
+- Consistent Hashing
+- Code Splitting
+- Differential Bundling - Support Older Browsers
+- Diagnostic
+- Error Handling
+- HTTPs
+- Tree Shaking - remove unused code
+- Different dev and prod bundles
+
+
 
 ## Coding Assignment:
 
@@ -47,4 +67,16 @@
    export dafault component;
    import components from "path";
 
-   
+  # 2 types Routing in web apps
+  - Client Side Routing
+  - Server Side Routing
+
+
+
+  # Redux ToolKit
+  - Install @reduxjs/toolkit and react-redux
+  - Build our store 
+  - Connect our store to our app
+  - Slice (cartSlice)
+  - dispatch(action)
+  - Selector
