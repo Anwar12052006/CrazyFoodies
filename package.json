@@ -1,42 +1,36 @@
 {
   "name": "namaste-react",
   "version": "1.0.0",
-  "description": "this is namaste react by akhsay saini",
+  "description": "Namaste React project with backend proxy",
   "scripts": {
-    "starts": "parcel index.html",
+    "start": "parcel index.html --port 3004",
     "build": "parcel build index.html",
-    "test": "jest"
+    "test": "echo \"No tests configured\" && exit 0"
   },
   "keywords": [
     "react",
-    "namaste"
+    "parcel",
+    "swiggy-clone"
   ],
-  "author": "akhsay sini",
+  "author": "anwar",
   "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.26.9",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
-    "parcel": "^2.13.0",
-    "process": "^0.11.10"
-  },
   "dependencies": {
-    "axios": "^1.9.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/postcss": "^4.1.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^6.22.3"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^6.30.1"
   },
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Anwar12052006/Namaste-React.git"
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "parcel": "^2.9.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
   },
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Anwar12052006/Namaste-React/issues"
-  },
-  "homepage": "https://github.com/Anwar12052006/Namaste-React#readme"
+  "browserslist": [
+    "last 2 versions",
+    "not dead"
+  ]
 }

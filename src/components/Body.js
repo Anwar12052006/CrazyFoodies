@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
-import RestaurantCard from './RestaurantCard';
+
+import { useEffect, useState, useContext } from 'react';
+import RestaurantCard, { withPromotedLabel } from './RestaurantCard';
 import Shimmer from './Shimmer';
 import { Link } from 'react-router-dom';
 import useOnlineStatus from '../utils/useOnlineStatus';
+import UserContext from '../utils/UserContext.js';
 
 const Body = () => {
   // * React Hook -> A normal JavaScript function which is given to us by React (or) Normal JS utility functions
@@ -12,64 +14,46 @@ const Body = () => {
   // * State Variable - Super Powerful variable
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
-
   const [searchText, setSearchText] = useState('');
 
+  const RestaurantCardPromoted = withPromotedLabel(RestaurantCard);
+
   // * Whenever a state variable updates or changes, react triggers a reconciliation cycle(re-renders the component)
-  // console.log('Body rendered');
+  console.log('Body Rendered', listOfRestaurants);
 
   useEffect(() => {
     fetchData();
   }, []);
- 
-
-//   const fetchData = async () => {
-//     const data = await fetch(
-//       'https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624480699999999&page_type=DESKTOP_WEB_LISTING'
-//     );
-
-  
 
 
-  
-
-
-//     const json = await data.json();
-
-   
-    
-
-//     // console.log(json);
-//     // * optional chaining
-//     // setListOfRestaurants(json.data.cards[2].data.data.cards);
-//    setListOfRestaurants(json?.data?.cards[2]?.data?.data?.cards);
-//    setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
-
-// //   const restaurantData = json?.data?.cards?.find(
-// //   (c) => c?.card?.card?.gridElements?.infoWithStyle?.restaurants
-// // )?.card?.card?.gridElements?.infoWithStyle?.restaurants;
-  
-
-// };
-  
-const fetchData = async () => {
-  const swiggyUrl = "https://www.swiggy.com/dapi/restaurants/list/v5?lat=30.7333148&lng=76.7794179&page_type=DESKTOP_WEB_LISTING";
-  const encodedURL = encodeURIComponent(swiggyUrl);
-
+  const fetchData = async () => {
   try {
-    const res = await fetch(`http://localhost:8080/proxy?url=${encodedURL}`);
-    const json = await res.json();
+    const data = await fetch("http://localhost:5000/api/swiggy");
 
-    console.log(json);
+    if (!data.ok) {
+      throw new Error(`Server returned ${data.status}`);
+    }
 
-    setListOfRestaurants(json?.data?.cards[2]?.data?.data?.cards);
-    setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
+    const json = await data.json();
+
+    console.log("✅ Swiggy data:", json);
+
+    // Use optional chaining to safely access deeply nested data
+    const restaurantCards = json?.data?.cards?.find(
+      (card) => card?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    )?.card?.card?.gridElements?.infoWithStyle?.restaurants;
+
+    if (!restaurantCards) {
+      throw new Error("⚠️ Could not find restaurant list in response.");
+    }
+
+    setListOfRestaurants(restaurantCards);
+    setFilteredRestaurant(restaurantCards);
   } catch (error) {
-    console.error("Error fetching restaurant data:", error);
+    console.error("❌ Failed to fetch Swiggy data:", error.message);
   }
 };
- 
-   
+
 
   const onlineStatus = useOnlineStatus();
 
@@ -80,7 +64,9 @@ const fetchData = async () => {
       </h1>
     );
 
-  return !listOfRestaurants || listOfRestaurants.length === 0 ? (
+  const { loggedInUser, setUserName } = useContext(UserContext);
+
+  return listOfRestaurants.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -88,25 +74,26 @@ const fetchData = async () => {
         <input type="text" placeholder="Search Food or Restaurant" />
         <button>Search</button>
       </div> */}
-      <div className="filter">
-        <div className="search">
+      <div className="filter flex">
+        <div className="search m-4 p-4">
           <input
             type="text"
             placeholder="Search a restaurant you want..."
-            className="searchBox"
+            className="searchBox border border-solid border-black"
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
           />
           <button
+            className="px-4 py-2 bg-green-100 m-4 rounded-lg"
             onClick={() => {
               // * Filter the restaurant cards and update the UI
               // * searchText
               console.log(searchText);
 
               const filteredRestaurant = listOfRestaurants.filter((res) =>
-                res.data.name.toLowerCase().includes(searchText.toLowerCase())
+                res.info.name.toLowerCase().includes(searchText.toLowerCase())
               );
 
               setFilteredRestaurant(filteredRestaurant);
@@ -115,22 +102,33 @@ const fetchData = async () => {
             Search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            // * Filter logic
-            const filteredList = listOfRestaurants.filter(
-              (res) => parseFloat(res.data.avgRating) > 4
-            );
+        <div className="search m-4 p-4 flex items-center">
+          <button
+            className="px-4 py-2 bg-gray-100 m-4 rounded-lg"
+            onClick={() => {
+              // * Filter logic
+              const filteredList = listOfRestaurants.filter(
+                (res) => parseFloat(res.info.avgRating) > 4
+              );
 
-            setFilteredRestaurant(filteredList);
-            console.log(filteredList);
-          }}
-        >
-          Top Rated Restaurants
-        </button>
+              setFilteredRestaurant(filteredList);
+              console.log(filteredList);
+            }}
+          >
+            Top Rated Restaurants
+          </button>
+        </div>
+        <div className="search m-4 p-4 flex items-center">
+          <label htmlFor="name">User Name: </label>
+          <input
+            id="name"
+            className="border border-black p-2"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex justify-center flex-wrap">
         {/* // * looping through the <RestaurentCard /> components Using Array.map() method */}
 
         {filteredRestaurant.map((restaurant) => (
@@ -139,12 +137,17 @@ const fetchData = async () => {
               textDecoration: 'none',
               color: '#000',
             }}
-            key={restaurant.data.id}
-            to={'/restaurants/' + restaurant.data.id}
+            key={restaurant.info.id}
+            to={'/restaurants/' + restaurant.info.id}
           >
-            <RestaurantCard resData={restaurant} />
+            {restaurant.info.promoted ? (
+              <RestaurantCardPromoted resData={restaurant} />
+            ) : (
+              <RestaurantCard resData={restaurant} />
+            )}
           </Link>
         ))}
+
       </div>
     </div>
   );

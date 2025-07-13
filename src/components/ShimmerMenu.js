@@ -16,8 +16,8 @@ const ShimmerMenu = () => {
             <h4 className="avg-rating shimmer-menu stroke animate">
               <span
                 className="icons shimmer-menu stroke animate"
-                stroke
-                animate
+                 //stroke
+                 //animate
                 style={{
                   position: 'relative',
                   top: '2px',

@@ -1,40 +1,45 @@
+
 import React, { lazy, Suspense } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import Header from './components/Header';
 import Body from './components/Body';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import About from './components/About';
 import Contact from './components/Contact';
 import Error from './components/Error';
 import RestaurantMenu from './components/RestaurantMenu';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-// import Grocery from './components/Grocery';
-
-// * Modularity is also known as:
-// * Chunking
-// * Code Splitting
-// * Dynamic Bundling
-// * Lazy Loading
-// * On-Demand Loading
-// * Dynamic Import
+import UserContext from './utils/UserContext';
+import { Provider } from 'react-redux';
+import appStore from './utils/appStore';
+import Cart from './components/Cart';
 
 const Grocery = lazy(() => import('./components/Grocery'));
 
 const AppLayout = () => {
-  // console.log(<Body />);
+  const [userName, setUserName] = useState();
+
+  // Authentication
+  useEffect(() => {
+    // Make an API call and send username and password
+    const data = {
+      name: 'Vasu K',
+    };
+    setUserName(data.name);
+  }, []);
+
   return (
-    <div className="app">
-      <Header />
-      {/** if path = /  */}
-      {/* <Body /> */}
-      {/** if path = /about  */}
-      {/* <About /> */}
-      {/** if path = /contact  */}
-      {/* <Contact /> */}
-      <Outlet />
-      <Footer />
-    </div>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+        <div className="app">
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -67,19 +72,19 @@ const appRouter = createBrowserRouter([
         path: '/restaurants/:resId',
         element: <RestaurantMenu />,
       },
+      {
+        path: '/cart',
+        element: <Cart />,
+      },
     ],
     errorElement: <Error />,
   },
-  // {
-  //   path: '/about',
-  //   element: <About />,
-  // },
-  // {
-  //   path: '/contact',
-  //   element: <Contact />,
-  // },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-root.render(<RouterProvider router={appRouter} />);
+root.render(
+  <Provider store={appStore}>
+    <RouterProvider router={appRouter} />
+  </Provider>
+);
