@@ -5,7 +5,10 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: "https://crazy-foodies.vercel.app",
+  origin: [
+    "https://crazy-foodies.vercel.app", 
+    /\.vercel\.app$/                    
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -51,4 +54,7 @@ app.get('/api/menu/:resId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch menu data' });
   }
 });
+
+module.exports = app; 
+
 
