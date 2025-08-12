@@ -13,21 +13,18 @@ const RestaurantMenu = () => {
 
   if (!resInfo) return <ShimmerMenu />;
 
-  // ✅ Extract basic restaurant info
   const {
     name,
     cuisines,
     costForTwoMessage,
   } = resInfo?.cards?.[0]?.card?.card?.info || {};
 
-  // ✅ Dynamically find the groupedCard with REGULAR menu
   const menuCard = resInfo.cards.find(
     (card) => card?.groupedCard?.cardGroupMap?.REGULAR
   );
 
   const menuItems = menuCard?.groupedCard?.cardGroupMap?.REGULAR?.cards || [];
 
-  // ✅ Extract only ItemCategory types
   const categories = menuItems.filter(
     (c) =>
       c.card?.card?.['@type'] ===
