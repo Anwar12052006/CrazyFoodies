@@ -1,18 +1,23 @@
 
-
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
 
-// ✅ Home test route
+app.use(cors({
+  origin: [
+    "https://crazy-foodies.vercel.app", 
+    /\.vercel\.app$/                    
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.get('/', (req, res) => {
   res.send('🎉 Swiggy Proxy Server is Running');
 });
 
-// ✅ Restaurant list route
 app.get('/api/swiggy', async (req, res) => {
   try {
     const response = await axios.get(
@@ -31,7 +36,6 @@ app.get('/api/swiggy', async (req, res) => {
   }
 });
 
-// ✅ THIS IS MISSING IN YOUR SERVER: ADD THIS 👇
 app.get('/api/menu/:resId', async (req, res) => {
   const { resId } = req.params;
 
@@ -52,7 +56,6 @@ app.get('/api/menu/:resId', async (req, res) => {
   }
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Proxy server running at http://localhost:${PORT}`);
-});
+module.exports = app; 
+
+

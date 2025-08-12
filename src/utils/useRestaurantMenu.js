@@ -8,14 +8,14 @@ const useRestaurantMenu = (resId) => {
 
   useEffect(() => {
     fetchData();
-  }, [resId]); // ✅ fix 1: add resId as dependency
+  }, [resId]); 
 
   const fetchData = async () => {
     try {
       const data = await fetch(MENU_API + resId);
       const json = await data.json();
-      console.log("✅ Swiggy data:", json); // ✅ helpful for debugging
-      setResInfo(json?.data); // ✅ fix 2: store json.data
+      console.log("✅ Swiggy data:", json); 
+      setResInfo(json?.data); 
     } catch (err) {
       console.error("❌ Error fetching restaurant menu:", err);
     }
