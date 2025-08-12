@@ -7,11 +7,6 @@ import useOnlineStatus from '../utils/useOnlineStatus';
 import UserContext from '../utils/UserContext.js';
 
 const Body = () => {
-  // * React Hook -> A normal JavaScript function which is given to us by React (or) Normal JS utility functions
-  // * useState() - Super Powerful variable
-  // * useEffect() -
-
-  // * State Variable - Super Powerful variable
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -28,7 +23,7 @@ const Body = () => {
 
   const fetchData = async () => {
   try {
-    const data = await fetch("http://localhost:5000/api/swiggy");
+    const data = await fetch("https://crazy-foodies-5jr6-git-main-anwar-razas-projects.vercel.app/api/swiggy");
 
     if (!data.ok) {
       throw new Error(`Server returned ${data.status}`);
