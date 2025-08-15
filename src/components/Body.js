@@ -23,7 +23,7 @@ const Body = () => {
 
   const fetchData = async () => {
   try {
-    const data = await fetch("https://crazy-foodies-p618.vercel.app/api/swiggy");
+    const data = await fetch("https://crazy-foodies-fig1.vercel.app/api/swiggy");
 
     if (!data.ok) {
       throw new Error(`Server returned ${data.status}`);
